@@ -20,7 +20,7 @@ public class Player {
 			System.out.println(ls.get(0)+" "+ls.get(1));
 		}
 		else if(ls.size()==1){
-			System.out.println("game over!!!");
+			System.out.println("GAME OVER!");
 		}
 		else if(ls.size()==5){          //ls contains game info
 			System.out.println("3 1");  //first move
