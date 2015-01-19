@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Player {
 
-	String playerName="aa";
+	String playerName="BEST PLAYER EVER";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	boolean first_move=false;
 	
