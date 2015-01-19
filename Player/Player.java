@@ -29,7 +29,7 @@ public class Player {
 			//TODO combine this information with game information to decide who is the first player
 		}
 		else
-			System.out.println("not what I want");
+			System.out.println("Not what I want.");
 	}
 	
 	public static void main(String[] args) throws IOException {
