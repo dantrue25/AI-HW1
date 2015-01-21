@@ -38,18 +38,30 @@ public class Player {
 			    System.err.println("IOException: " + ioe.getMessage());
 			}
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println(num +" "+1);
 			turnNum++;
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(ls.size()==1){
 			System.out.println("GAME OVER!");
 		}
 		else if(ls.size()==5){          //ls contains game info
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			try
 			{
 			    String filename= "MyFile.txt";
@@ -61,8 +73,20 @@ public class Player {
 			{
 			    System.err.println("IOException: " + ioe.getMessage());
 			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			System.out.println(num + " 1");  //first movetry
 			turnNum++;
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		else if(ls.size()==4){		//player1: aa player2: bb
 			//TODO combine this information with game information to decide who is the first player
