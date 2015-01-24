@@ -1,5 +1,7 @@
 package Player;
 
+import java.util.ArrayList;
+
 public class Board {
 	
 	int width;
@@ -18,8 +20,29 @@ public class Board {
 		this.width = width;
 		this.height = height;
 		board = new int[height][width];
-		
 	}
 	
+	//Returns a new board with the same state
+	public Board clone()
+	{
+		Board b = new Board(0, 0, 0);
+		return b;
+	}
+	
+	
+	
+	//Given a player, use the current board state to create a list of possible moves
+	public ArrayList<Move> getMoves(int player)
+	{
+		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+		return possibleMoves;
+	}
+	
+	
+	//Updates the currentState board based on the given move
+	public void makeMove(Move move)
+	{
+		
+	}
 	
 }
