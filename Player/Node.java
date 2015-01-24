@@ -13,6 +13,7 @@ public class Node {
 	public double hval;
 	public ArrayList<Move> moves;
 	public ArrayList<Node> children;
+	public int level;
 	
 	public Node(int hvals, ArrayList<Move> moves) {
 		this.hval = hvals;
