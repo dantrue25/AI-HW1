@@ -15,14 +15,13 @@ public class Node {
 	public ArrayList<Node> children;
 	public int level;
 	
-	public Node(int hvals, ArrayList<Move> moves) {
-		this.hval = hvals;
+	public Node(ArrayList<Move> moves) {
 		this.moves = moves;
 		this.children = null;
 	}
 	
-	public void addChild(int hval, ArrayList<Move> moves){
-		children.add(new Node(hval, moves));
+	public void addChild(ArrayList<Move> moves){
+		children.add(new Node(moves));
 	}
 	
 }
