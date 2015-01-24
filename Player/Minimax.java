@@ -9,11 +9,14 @@ package Player;
  */
 public class Minimax {
 
+	public Node root;
+	
 	/**
-	 * 
+	 * Constructor
+	 * @param root
 	 */
-	public Minimax() {
-		// TODO Auto-generated constructor stub
+	public Minimax(Node root) {
+		this.root = root;
 	}
 
 }
