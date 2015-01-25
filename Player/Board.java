@@ -20,6 +20,8 @@ public class Board {
 	int PLAYER2 = 2;
 	int NOCONNECTION=-1;
 	int TIE = 0;
+	boolean player1Pop = false;
+	boolean player2Pop = false;
 	
 	Board(int height, int width, int N)
 	{
@@ -55,14 +57,18 @@ public class Board {
 		for(int i = 0; i < this.width; i++)
 		{
 			Move dropMove = new Move(i, 1);
+			Move popMove = new Move(i, 0);
+			
+			
 			if(this.canDropADiscFromTop(dropMove.column, player))
 			{
 				possibleMoves.add(dropMove);
 			}
-			Move popMove = new Move(i, 0);
+			
 			if(this.canRemoveADiscFromBottom(popMove.column, player))
 			{
-				possibleMoves.add(popMove);
+				if( (player == 1 && player1Pop) || (player == 2 && player2Pop))
+					possibleMoves.add(popMove);
 			}
 		}
 		return possibleMoves;
@@ -82,6 +88,10 @@ public class Board {
 		else if(move.moveType == 0)
 		{
 			this.removeADiscFromBottom(move.column);
+			if(playerNum == 1)
+				player1Pop = true;
+			else 
+				player2Pop = true;
 		}
 	}
 	
