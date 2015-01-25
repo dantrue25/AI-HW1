@@ -49,7 +49,7 @@ public class Board {
 	}
 	
 	//Determine a value for the given board
-	public double utility()
+	public double getHeuristic()
 	{
 		
 		return Math.round(Math.random()+1);

@@ -78,7 +78,7 @@ public class Player {
 			Node root = new Node(new ArrayList<Move>());
 			
 			// Get next move from minimax algorithm
-			Move ourNextMove = minimax(root, new ArrayList<Move>()).get(0);
+			Move ourNextMove = minimax(root, 4).moves.get(0);
 			
 			currentState.makeMove(ourNextMove, ourPlayerNum);
 			System.out.println(ourNextMove.toString());
@@ -97,8 +97,7 @@ public class Player {
 		
 		/*
 		 * ls.size() == 4
-		 * Not sure if this exists.
-		 * It does exist. It tells player1: name player2: name
+		 * Receive information on who goes first and second.
 		 */
 		else if(ls.size()==4){
 			if(ls.get(1).equals(playerName)) {
@@ -127,13 +126,54 @@ public class Player {
 	 * Takes in a node and move list, and returns a move list with the highest
 	 * heuristic value. 
 	 */
-	public ArrayList<Move> minimax (Node currentNode, ArrayList<Move> moveList) {
+	public Node minimax (Node currentNode, int terminalDepth) {
+		Board currentBoardCopy = currentState.clone();
+		ArrayList<Move> moveList = currentNode.moves;
+		int player = ourPlayerNum;
 		
-		// Stub function. Not implemented
-		Move m = new Move(1, 1);
-		moveList.add(m);
+		for(Move m: moveList) {
+			currentBoardCopy.makeMove(m, player);
+			
+			if(player == ourPlayerNum)
+				player = otherPlayerNum;
+			else
+				player = ourPlayerNum;
+		}
 		
-		return moveList;
+		// If it is a leaf node, calculate heuristic and return it
+		if(moveList.size() >= terminalDepth) {
+			currentNode.heuristic = currentBoardCopy.getHeuristic();
+			return currentNode;
+		}
+		
+		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
+		
+		for(Move newM: newMoves) {
+			Node n = new Node(moveList);
+			n.moves.add(newM);
+			currentNode.addChild(n);
+			minimax(n, terminalDepth);
+		}
+		
+		return max(currentNode.children);
+	}
+	
+	/*
+	 * Returns the node with the highest heuristic
+	 */
+	public Node max (ArrayList<Node> children) {
+		if (children.isEmpty())
+			return null;
+		
+		double bestSoFar = children.get(0).heuristic;
+		Node best = children.get(0);
+		
+		for(Node n: children) {
+			if(n.heuristic > bestSoFar)
+				best = n;
+		}
+		
+		return best;
 	}
 	
 	/*

@@ -10,18 +10,21 @@ import java.util.ArrayList;
  */
 
 public class Node {
-	public double hval;
+	public double heuristic;
 	public ArrayList<Move> moves;
 	public ArrayList<Node> children;
-	public int level;
 	
 	public Node(ArrayList<Move> moves) {
 		this.moves = moves;
 		this.children = null;
 	}
 	
-	public void addChild(ArrayList<Move> moves){
-		children.add(new Node(moves));
+	public void addChild(Node child){
+		children.add(child);
+	}
+	
+	public int getLevel() {
+		return moves.size();
 	}
 	
 }
