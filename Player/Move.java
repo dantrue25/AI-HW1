@@ -10,7 +10,7 @@ package Player;
 public class Move {
 	public int column;
 	public int moveType;
-	
+	public int row;
 	/**
 	 * Constructor
 	 * @param column

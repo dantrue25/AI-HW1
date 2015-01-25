@@ -1,3 +1,9 @@
+/**
+ * @Author: Mainly Taken from given referee board class
+ * @Author: Nicholas Muesch
+ * @Author: Dan B. True
+ */
+
 package Player;
 
 import java.util.ArrayList;
@@ -22,7 +28,6 @@ public class Board {
 		this.height = height;
 		board = new int[height][width];
 		numOfDiscsInColumn=new int[this.width];
-
 	}
 	
 	//Returns a new board with the same state as the given board
@@ -47,7 +52,19 @@ public class Board {
 	public ArrayList<Move> getMoves(int player)
 	{
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
-		
+		for(int i = 0; i < this.width; i++)
+		{
+			Move dropMove = new Move(i, 1);
+			if(this.canDropADiscFromTop(dropMove.column, player))
+			{
+				possibleMoves.add(dropMove);
+			}
+			Move popMove = new Move(i, 0);
+			if(this.canRemoveADiscFromBottom(popMove.column, player))
+			{
+				possibleMoves.add(popMove);
+			}
+		}
 		return possibleMoves;
 	}
 	
@@ -56,7 +73,18 @@ public class Board {
 	//Dropping is 1
 	//Popping out is 0
 	//Need current player
-
+	public void makeMove(Move move, int playerNum)
+	{
+		if(move.moveType == 1)
+		{
+			this.dropADiscFromTop(move.column, playerNum);
+		}
+		else if(move.moveType == 0)
+		{
+			this.removeADiscFromBottom(move.column);
+		}
+	}
+	
 	//Prints the board to stdout
 	 public void printBoard(){
 		 System.out.println("Board: ");
@@ -72,11 +100,9 @@ public class Board {
 	 //Check this function, seems weird
 	 public boolean canRemoveADiscFromBottom(int col, int currentPlayer){
 		 if(col<0 || col>=this.width) {
-			 System.out.println("Illegal column!");
 			 return false;
 			 }
 		 else if(board[height-1][col]!=currentPlayer){
-			 System.out.println("You don't have a checker in column "+col+" to pop out!");
 			 return false;
 		 }
 		 else 
@@ -97,11 +123,9 @@ public class Board {
 	 //Checks to see if dropping move is valid
 	 public boolean canDropADiscFromTop(int col, int currentPlayer){
 		 if(col<0 || col>=this.width) {
-			 System.out.println("Illegal column!");
 			 return false;
 			 }
 		 else if(this.numOfDiscsInColumn[col]==this.height){
-			 System.out.println("Column is already full. Cannot drop more disc in it.");
 			 return false;
 		 }
 		 else
