@@ -18,7 +18,7 @@ public class Player {
 	int width;
 	int connectN;
 	int moveTime;
-	
+	int firstPlayer;
 	int ourPlayerNum;
 	int otherPlayerNum;
 	int turnNum = 1;
@@ -34,21 +34,21 @@ public class Player {
 		 * First move.
 		 */
 		if(ls.size()==5){
-		
+			
 			height = Integer.parseInt(ls.get(0));       // (0) Board height
 			width =  Integer.parseInt(ls.get(1));       // (1) Board width
 			connectN = Integer.parseInt(ls.get(2));     // (2) How many to connect to win
-			ourPlayerNum = Integer.parseInt(ls.get(3)); // (3) Our turn number (1 if going first, 2 if second)
+			firstPlayer = Integer.parseInt(ls.get(3)); // (3) Our turn number (1 if going first, 2 if second)
 			moveTime = Integer.parseInt(ls.get(4));     // (4) Time allotted for each move
 			
 			// Create initial board
 			currentState = new Board(height, width, connectN);
 			
 			// If we are going first, make a move, else, do nothing TEST
-			if(ourPlayerNum == 1)
+			if(ourPlayerNum == firstPlayer)
 			{
 				first_move = true;
-				otherPlayerNum = 2;
+				//otherPlayerNum = 2;
 				
 				//Make a move
 				Move firstMove = new Move( (int)(width/2 + 1), 1);
@@ -56,10 +56,14 @@ public class Player {
 				System.out.println(firstMove.toString());
 			}
 			else {
-				otherPlayerNum = 1;
+				//otherPlayerNum = 1;
+				
+				//writer.println("This is not our move!!!");
 			}
 
 			turnNum++;
+			return true;
+			//writer.println("This is the end of our turn!");
 		}
 		
 		/* 
@@ -94,8 +98,17 @@ public class Player {
 		/*
 		 * ls.size() == 4
 		 * Not sure if this exists.
+		 * It does exist. It tells player1: name player2: name
 		 */
 		else if(ls.size()==4){
+			if(ls.get(1) == playerName) {
+				ourPlayerNum = 1;
+				otherPlayerNum  =2;
+			}
+			else {
+				otherPlayerNum = 1;
+				ourPlayerNum  = 2;
+			}
 			// Take out if unnecessary
 		}
 		
