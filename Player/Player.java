@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+//import javax.swing.JOptionPane;
+
 
 
 public class Player {
@@ -51,7 +53,7 @@ public class Player {
 				//otherPlayerNum = 2;
 				
 				//Make a move
-				Move firstMove = new Move( (int)(width/2 + 1), 1);
+				Move firstMove = new Move( (int)(width/2), 1);
 				currentState.makeMove(firstMove, ourPlayerNum);
 				System.out.println(firstMove.toString());
 			}
@@ -78,7 +80,7 @@ public class Player {
 			Node root = new Node(new ArrayList<Move>());
 			
 			// Get next move from minimax algorithm
-			Move ourNextMove = minimax(root, 4).moves.get(0);
+			Move ourNextMove = minimax(root, 1).moves.get(0);
 			
 			currentState.makeMove(ourNextMove, ourPlayerNum);
 			System.out.println(ourNextMove.toString());
@@ -127,6 +129,9 @@ public class Player {
 	 * best minimax value.
 	 */
 	public Node minimax (Node currentNode, int terminalDepth) {
+//		/////////////////////////////
+//		JOptionPane.showMessageDialog(null, "11111111");
+		
 		Board currentBoardCopy = currentState.clone();
 		ArrayList<Move> moveList = currentNode.moves;
 		int player = ourPlayerNum;
@@ -140,6 +145,9 @@ public class Player {
 				player = ourPlayerNum;
 		}
 		
+//		///////////////////////////////
+//		JOptionPane.showMessageDialog(null, "222222222");
+		
 		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
 		
 		// If it is a leaf node, calculate heuristic and return it
@@ -147,6 +155,9 @@ public class Player {
 			currentNode.heuristic = currentBoardCopy.getHeuristic();
 			return currentNode;
 		}
+		
+//		//////////////////////////////////
+//		JOptionPane.showMessageDialog(null, "MOVES: " + newMoves.size());
 		
 		for(Move newM: newMoves) {
 			Node n = new Node(moveList);
@@ -165,8 +176,6 @@ public class Player {
 	 * Returns the node with the highest heuristic
 	 */
 	public Node max (ArrayList<Node> children) {
-		if (children.isEmpty())
-			return null;
 		
 		double highestHeuristic = children.get(0).heuristic;
 		Node highestNode = children.get(0);
@@ -185,8 +194,6 @@ public class Player {
 	 * Returns the node with the lowest heuristic
 	 */
 	public Node min (ArrayList<Node> children) {
-		if (children.isEmpty())
-			return null;
 		
 		double lowestHeuristic = children.get(0).heuristic;
 		Node lowestNode = children.get(0);
@@ -209,6 +216,7 @@ public class Player {
 	public static void main(String[] args) throws IOException {
 		Player rp=new Player();
 		System.out.println(rp.playerName);
+
 		
 		boolean continueGame = rp.processInput();
 		

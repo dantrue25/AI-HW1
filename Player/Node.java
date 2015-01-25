@@ -16,7 +16,7 @@ public class Node {
 	
 	public Node(ArrayList<Move> moves) {
 		this.moves = moves;
-		this.children = null;
+		this.children = new ArrayList<Node>();
 	}
 	
 	public void addChild(Node child){
