@@ -123,8 +123,8 @@ public class Player {
 	
 	/*
 	 * Our minimax implementation.
-	 * Takes in a node and move list, and returns a move list with the highest
-	 * heuristic value. 
+	 * Takes in a node and a terminal depth, and returns a node with the highest
+	 * best minimax value.
 	 */
 	public Node minimax (Node currentNode, int terminalDepth) {
 		Board currentBoardCopy = currentState.clone();
@@ -140,13 +140,13 @@ public class Player {
 				player = ourPlayerNum;
 		}
 		
+		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
+		
 		// If it is a leaf node, calculate heuristic and return it
-		if(moveList.size() >= terminalDepth) {
+		if(moveList.size() >= terminalDepth || newMoves.isEmpty()) {
 			currentNode.heuristic = currentBoardCopy.getHeuristic();
 			return currentNode;
 		}
-		
-		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
 		
 		for(Move newM: newMoves) {
 			Node n = new Node(moveList);
@@ -155,7 +155,10 @@ public class Player {
 			minimax(n, terminalDepth);
 		}
 		
-		return max(currentNode.children);
+		if(moveList.size() % 2 == 0)
+			return max(currentNode.children);
+		else
+			return min(currentNode.children);
 	}
 	
 	/*
@@ -165,15 +168,37 @@ public class Player {
 		if (children.isEmpty())
 			return null;
 		
-		double bestSoFar = children.get(0).heuristic;
-		Node best = children.get(0);
+		double highestHeuristic = children.get(0).heuristic;
+		Node highestNode = children.get(0);
 		
 		for(Node n: children) {
-			if(n.heuristic > bestSoFar)
-				best = n;
+			if(n.heuristic > highestHeuristic) {
+				highestHeuristic = n.heuristic;
+				highestNode = n;
+			}
 		}
 		
-		return best;
+		return highestNode;
+	}
+	
+	/*
+	 * Returns the node with the lowest heuristic
+	 */
+	public Node min (ArrayList<Node> children) {
+		if (children.isEmpty())
+			return null;
+		
+		double lowestHeuristic = children.get(0).heuristic;
+		Node lowestNode = children.get(0);
+		
+		for(Node n: children) {
+			if(n.heuristic < lowestHeuristic) {
+				lowestHeuristic = n.heuristic;
+				lowestNode = n;
+			}
+		}
+		
+		return lowestNode;
 	}
 	
 	/*
