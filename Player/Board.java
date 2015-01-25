@@ -48,6 +48,13 @@ public class Board {
 		return b;
 	}
 	
+	//Determine a value for the given board
+	public double utility()
+	{
+		
+		return Math.round(Math.random()+1);
+	}
+	
 	
 	
 	//Given a player, use the current board state to create a list of possible moves
