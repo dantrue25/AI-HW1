@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.Random;
 
 
+
 public class Player {
 
-	public Board currentState;
+	public static Board currentState;
 	String playerName="A";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	boolean first_move=false;
@@ -61,7 +62,7 @@ public class Player {
 			{
 				//Make a move;
 				Move firstMove = new Move( (int)(width/2 + 1), 1);
-				currentState.makeMove(firstMove);
+				//currentState.setBoard(firstMove.column, firstMove.moveType,  );
 				first_move = true;
 				System.out.println(firstMove.toString());
 			}
