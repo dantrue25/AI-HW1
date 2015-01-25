@@ -11,7 +11,7 @@ import java.util.List;
 public class Player {
 
 	public static Board currentState;
-	String playerName = "A";
+	String playerName = "B";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	
 	int height;
@@ -38,7 +38,7 @@ public class Player {
 			height = Integer.parseInt(ls.get(0));       // (0) Board height
 			width =  Integer.parseInt(ls.get(1));       // (1) Board width
 			connectN = Integer.parseInt(ls.get(2));     // (2) How many to connect to win
-			firstPlayer = Integer.parseInt(ls.get(3)); // (3) Our turn number (1 if going first, 2 if second)
+			firstPlayer = Integer.parseInt(ls.get(3));  // (3) Our turn number (1 if going first, 2 if second)
 			moveTime = Integer.parseInt(ls.get(4));     // (4) Time allotted for each move
 			
 			// Create initial board
@@ -101,9 +101,9 @@ public class Player {
 		 * It does exist. It tells player1: name player2: name
 		 */
 		else if(ls.size()==4){
-			if(ls.get(1) == playerName) {
+			if(ls.get(1).equals(playerName)) {
 				ourPlayerNum = 1;
-				otherPlayerNum  =2;
+				otherPlayerNum = 2;
 			}
 			else {
 				otherPlayerNum = 1;
