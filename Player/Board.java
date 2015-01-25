@@ -52,7 +52,7 @@ public class Board {
 	public double getHeuristic()
 	{
 		
-		return Math.round(Math.random()+1);
+		return Math.random();
 	}
 	
 	
@@ -61,6 +61,11 @@ public class Board {
 	public ArrayList<Move> getMoves(int player)
 	{
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+		
+		if(isConnectN() != NOCONNECTION){ 
+			return possibleMoves;
+		}
+		
 		for(int i = 0; i < this.width; i++)
 		{
 			Move dropMove = new Move(i, 1);
