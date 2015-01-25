@@ -67,8 +67,16 @@ public class Board {
 			
 			if(this.canRemoveADiscFromBottom(popMove.column, player))
 			{
-				if( (player == 1 && player1Pop) || (player == 2 && player2Pop))
+				if( player == 1 && !player1Pop)
+				{
 					possibleMoves.add(popMove);
+					player1Pop = true;
+				}
+				else if(player == 2 && !player2Pop)
+				{
+					possibleMoves.add(popMove);
+					player2Pop = true;
+				}
 			}
 		}
 		return possibleMoves;
