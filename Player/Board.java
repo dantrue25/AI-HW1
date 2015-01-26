@@ -6,6 +6,8 @@
 
 package Player;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Board {
@@ -28,7 +30,7 @@ public class Board {
 		this.N = N;
 		this.width = width;
 		this.height = height;
-		board = new int[height][width];
+		this.board = new int[height][width];
 		numOfDiscsInColumn=new int[this.width];
 	}
 	
@@ -45,6 +47,13 @@ public class Board {
 				b.board[i][j] = this.board[i][j];
 			}
 		}
+		
+		for(int k = 0; k < this.width; k++)
+		{
+			b.numOfDiscsInColumn[k] = this.numOfDiscsInColumn[k];
+		}
+		b.player1Pop = this.player1Pop;
+		b.player2Pop = this.player2Pop;
 		return b;
 	}
 	
@@ -61,7 +70,6 @@ public class Board {
 	public ArrayList<Move> getMoves(int player)
 	{
 		ArrayList<Move> possibleMoves = new ArrayList<Move>();
-		
 		if(isConnectN() != NOCONNECTION){ 
 			return possibleMoves;
 		}
@@ -74,6 +82,7 @@ public class Board {
 			
 			if(this.canDropADiscFromTop(dropMove.column, player))
 			{
+				
 				possibleMoves.add(dropMove);
 			}
 			
@@ -91,6 +100,23 @@ public class Board {
 				}
 			}
 		}
+		
+		try
+		{
+				    String filename= "DebugA.txt";
+				    FileWriter fw = new FileWriter(filename,true); //the true will append the new data
+				    fw.write("MoveList: for player: " + player + "\n");//appends the string to the file
+				    for(int i = 0; i < possibleMoves.size(); i++)
+				    {
+				    	fw.write(possibleMoves.get(i).toString() + "\n" );
+				    }
+				    fw.close();
+				}
+				catch(IOException ioe)
+				{
+				    System.err.println("IOException: " + ioe.getMessage());
+				}
+		
 		return possibleMoves;
 	}
 	
@@ -117,13 +143,28 @@ public class Board {
 	
 	//Prints the board to stdout
 	 public void printBoard(){
-		 System.out.println("Board: ");
-		 for(int i=0;i<height;i++){
-				for(int j=0;j<width;j++){
-					System.out.print(board[i][j]+" ");
-				}
-				System.out.println();
-		 }
+			try
+			{
+					    String filename= "DebugBoard.txt";
+					    FileWriter fw = new FileWriter(filename,true); //the true will append the new data
+					    fw.write("Board \n");//appends the string to the file
+					    for(int j = 0; j < this.width; j++)
+					    {
+					    	fw.write(this.numOfDiscsInColumn[j] + " ");
+					    }
+						 for(int i=0;i<height;i++){
+								for(int j=0;j<width;j++){
+									fw.write(board[i][j]+" ");
+								}
+								fw.write("\n");
+						 }
+						 fw.close();
+					}
+					catch(IOException ioe)
+					{
+					    System.err.println("IOException: " + ioe.getMessage());
+					}
+
 	 }
 	 
 	 //Checks to see if the given player can validly remove a piece from bottom

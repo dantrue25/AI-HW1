@@ -80,10 +80,16 @@ public class Player {
 			Node root = new Node(new ArrayList<Move>());
 			
 			// Get next move from minimax algorithm
-			Move ourNextMove = minimax(root, 1).moves.get(0);
+			Move ourNextMove = minimax(root, 2).moves.get(0);
 			
 			currentState.makeMove(ourNextMove, ourPlayerNum);
 			System.out.println(ourNextMove.toString());
+			
+			currentState.printBoard();
+			Board b = currentState.clone();
+			b.printBoard();
+			
+			 
 			
 			turnNum++;
 		}
