@@ -1,3 +1,8 @@
+/*
+ * @Authors: Daniel B True      dbtrue@wpi.edu
+ * @Authors: Nicholas Muesch    nmmuesch@wpi.edu
+ */
+
 package Player;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,6 +35,11 @@ public class Player {
 	int MAXVALUE = 1000;
 	int MINVALUE = -1000;
 	
+	/**
+	 * 
+	 * Handles the input/output from/to the referee
+	 * This is where we actually play moves
+	 */
 	public boolean processInput() throws IOException{	
 	
     	String s=input.readLine();	
@@ -37,7 +47,7 @@ public class Player {
 		
 		/*
 		 * ls.size() == 5
-		 * First move.
+		 * Gets information about the board, who goes first, and how much time we have per move
 		 */
 		if(ls.size()==5){
 			
@@ -97,12 +107,16 @@ public class Player {
 			// Get next move from minimax algorithm
 			Move ourNextMove = minimax(root).moves.get(0);
 			
+			// Update our board with the move we chose
 			currentState.makeMove(ourNextMove, ourPlayerNum);
+			
+			//Send the move to the referee to go to the opponent
 			System.out.println(ourNextMove.toString());
 			
-			currentState.printBoard();
-			Board b = currentState.clone();
-			b.printBoard();
+			
+			//currentState.printBoard();
+			//Board b = currentState.clone();
+			//b.printBoard();
 			
 			turnNum++;
 		}
@@ -146,6 +160,9 @@ public class Player {
 	 * Our minimax implementation.
 	 * Takes in a node and a terminal depth, and returns a node with the highest
 	 * best minimax value.
+	 * Our alphaBeta Pruning implementation
+	 * Sets a skipSibling flag in a node if its value is less than or greater than, depending on which level
+	 * we are at, than the max or min of the parents nodes.
 	 */
 	public Node minimax (Node currentNode) {
 		
@@ -218,6 +235,11 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * 
+	 * Takes an ArrayList of Moves and clones it
+	 * 
+	 */
 	public ArrayList<Move> clone(ArrayList<Move> moves) {
 		ArrayList<Move> copyMoves = new ArrayList<Move>();
 		for(Move m: moves) {
@@ -249,7 +271,7 @@ public class Player {
 	 */
 	
 	/*
-	 * Returns the node with the highest heuristic
+	 * Returns the node with the highest heuristic out of the given nodes children
 	 */
 	public Node max (ArrayList<Node> children) {
 		
@@ -267,7 +289,7 @@ public class Player {
 	}
 	
 	/*
-	 * Returns the node with the lowest heuristic
+	 * Returns the node with the lowest heuristic out of the given nodes children
 	 */
 	public Node min (ArrayList<Node> children) {
 		

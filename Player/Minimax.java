@@ -1,6 +1,8 @@
-/**
- * 
+/*
+ * @Authors: Daniel B True      dbtrue@wpi.edu
+ * @Authors: Nicholas Muesch    nmmuesch@wpi.edu
  */
+
 package Player;
 
 /**

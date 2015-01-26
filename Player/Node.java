@@ -1,3 +1,8 @@
+/*
+ * @Authors: Daniel B True      dbtrue@wpi.edu
+ * @Authors: Nicholas Muesch    nmmuesch@wpi.edu
+ */
+
 package Player;
 
 import java.util.ArrayList;
@@ -20,10 +25,16 @@ public class Node {
 		this.children = new ArrayList<Node>();
 	}
 	
+	/*
+	 * Adds a node to this nodes children
+	 */
 	public void addChild(Node child){
 		children.add(child);
 	}
 	
+	/*
+	 * Returns the depth level of this Node by getting the size of its move List
+	 */
 	public int getLevel() {
 		return moves.size();
 	}

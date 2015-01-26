@@ -1,5 +1,6 @@
-/**
- * 
+/*
+ * @Authors: Daniel B True      dbtrue@wpi.edu
+ * @Authors: Nicholas Muesch    nmmuesch@wpi.edu
  */
 package Player;
 
@@ -21,6 +22,9 @@ public class Move {
 		this.moveType = moveType;
 	}
 	
+	/*
+	 * Returns a clone of the given Move 
+	 */
 	public Move clone() {
 		Move newMove = new Move(this.column, this.moveType);
 		newMove.row = this.row;

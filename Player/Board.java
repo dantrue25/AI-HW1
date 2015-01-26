@@ -127,6 +127,7 @@ public class Board {
 	//Dropping is 1
 	//Popping out is 0
 	//Need current player
+	//This function assumes that the move is valid
 	public void makeMove(Move move, int playerNum)
 	{
 		if(move.moveType == 1)
@@ -222,7 +223,7 @@ public class Board {
 			return true;
 		}
 	 
-	 
+	 //Check to see if there is a winner
 	 public int isConnectN(){
 			int tmp_winner=checkHorizontally();
 			
@@ -241,9 +242,9 @@ public class Board {
 					return tmp_winner; 
 			 
 			 return this.NOCONNECTION;
-			 
 		 }
 		 
+	 //Check the board horizontally to see if there is a winner
 	  public int checkHorizontally(){
 		  int max1=0;
 			 int max2=0;
@@ -282,6 +283,7 @@ public class Board {
 			 return this.NOCONNECTION;
 	  }
 
+	  //Check the board vertically to see if there is a winner
 	  public int checkVertically(){
 		  //check each column, vertically
 		  int max1=0;
@@ -321,6 +323,8 @@ public class Board {
 			 return this.NOCONNECTION;
 	  }
 	  
+	  
+	  //Check the board diagonally to see if there is a winner
 	   public int checkDiagonally1(){
 		 //check diagonally y=-x+k
 		   int max1=0;
@@ -372,6 +376,7 @@ public class Board {
 			 return this.NOCONNECTION;
 	   }
 		 
+	   //Check the board diagonally to see if there is a winner
 	   public int checkDiagonally2(){
 		 //check diagonally y=x-k
 		   int max1=0;
@@ -424,7 +429,7 @@ public class Board {
 			 return this.NOCONNECTION;
 	   }
 		 
-		 
+		 //Update the board with the given row, column and playerNumber
 		 public void setBoard(int row, int col, int player){
 			 if(row>=height || col>=width)
 				 throw new IllegalArgumentException("The row or column number is out of bound!");
