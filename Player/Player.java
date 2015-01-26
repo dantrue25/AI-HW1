@@ -13,7 +13,7 @@ import java.util.List;
 public class Player {
 
 	public static Board currentState;
-	String playerName = "A";
+	String playerName = "B";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	
 	int height;
@@ -25,8 +25,10 @@ public class Player {
 	int otherPlayerNum;
 	int turnNum = 1;
 	boolean first_move=false;
-	
+	ArrayList<Integer> alphaBeta;
 	int terminalDepth = 3;
+	int MAXVALUE = 1000;
+	int MINVALUE = -1000;
 	
 	public boolean processInput() throws IOException{	
 	
@@ -81,6 +83,17 @@ public class Player {
 			
 			Node root = new Node(new ArrayList<Move>());
 					
+			alphaBeta = new ArrayList<Integer>();
+			
+			for(int i = 0; i < terminalDepth; i++) {
+				if( (i % 2) == 0 ) {
+					alphaBeta.add(MAXVALUE);
+				}
+				else
+					alphaBeta.add(MINVALUE);
+					
+			}
+			
 			// Get next move from minimax algorithm
 			Move ourNextMove = minimax(root).moves.get(0);
 			
@@ -154,6 +167,22 @@ public class Player {
 
 		if(moveList.size() >= terminalDepth || newMoves.isEmpty()) {
 			currentNode.heuristic = currentBoardCopy.getHeuristic();
+			
+			if(currentNode.getLevel() % 2 == 0) {
+				if(currentNode.getLevel() > 1) {
+					if(currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
+						currentNode.skipSiblings = true;
+					}
+				}
+			}
+			else {
+				if(currentNode.getLevel() > 1) {
+					if(currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
+						currentNode.skipSiblings = true;
+					}
+				}
+			}
+			
 			return currentNode;
 		}
 		
@@ -171,11 +200,29 @@ public class Player {
 				break;
 		}
 		
+		
+		
 		if(moveList.size() % 2 == 0) {
-			return max(nodes);
+			Node max = max(nodes);
+			if(currentNode.getLevel() > 1) {
+			if(currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
+				currentNode.skipSiblings = true;
+			}
+			}
+			int maxAlpha = Math.max(alphaBeta.get(currentNode.getLevel()),  (int)(max.heuristic));
+			alphaBeta.set(currentNode.getLevel(), maxAlpha);
+			return max;
 		}
 		else {
-			return min(nodes);
+			Node min = min(nodes);
+			if(currentNode.getLevel() > 1) {
+			if(currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
+				currentNode.skipSiblings = true;
+			}
+			}
+			int minBeta = Math.min(alphaBeta.get(currentNode.getLevel()), (int)min.heuristic);
+			alphaBeta.set(currentNode.getLevel(), minBeta);
+			return min;
 		}
 	}
 	
