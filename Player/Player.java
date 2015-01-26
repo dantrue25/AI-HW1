@@ -26,6 +26,8 @@ public class Player {
 	int turnNum = 1;
 	boolean first_move=false;
 	
+	int terminalDepth = 3;
+	
 	public boolean processInput() throws IOException{	
 	
     	String s=input.readLine();	
@@ -78,9 +80,9 @@ public class Player {
 			currentState.makeMove(oppMove, otherPlayerNum);
 			
 			Node root = new Node(new ArrayList<Move>());
-			
+					
 			// Get next move from minimax algorithm
-			Move ourNextMove = minimax(root, 5).moves.get(0);
+			Move ourNextMove = minimax(root).moves.get(0);
 			
 			currentState.makeMove(ourNextMove, ourPlayerNum);
 			System.out.println(ourNextMove.toString());
@@ -88,8 +90,6 @@ public class Player {
 			currentState.printBoard();
 			Board b = currentState.clone();
 			b.printBoard();
-			
-			 
 			
 			turnNum++;
 		}
@@ -134,7 +134,7 @@ public class Player {
 	 * Takes in a node and a terminal depth, and returns a node with the highest
 	 * best minimax value.
 	 */
-	public Node minimax (Node currentNode, int terminalDepth) {
+	public Node minimax (Node currentNode) {
 		
 		// Create board of new state
 		Board currentBoardCopy = currentState.clone();
@@ -152,24 +152,31 @@ public class Player {
 	
 		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
 
-		for(Move newM: newMoves) {
-			Node n = new Node(moveList);
-			n.moves.add(newM);
-			currentNode.addChild(n);
-		}
-		
-		for(Node child: currentNode.children) {
-			minimax(child, terminalDepth);
-		}
-		
 		if(moveList.size() >= terminalDepth || newMoves.isEmpty()) {
 			currentNode.heuristic = currentBoardCopy.getHeuristic();
 			return currentNode;
 		}
-		else if(moveList.size() % 2 == 0)
-			return max(currentNode.children);
-		else
-			return min(currentNode.children);
+		
+		for(Move newM: newMoves) {
+			ArrayList<Move> moves = (ArrayList<Move>) moveList.clone();
+			Node n = new Node(moves);
+			n.moves.add(newM);
+			currentNode.addChild(n);
+		}
+		
+		ArrayList<Node> nodes = new ArrayList<Node>();
+		for(Node child: currentNode.children) {
+			nodes.add(minimax(child));
+			if(child.skipSiblings)
+				break;
+		}
+		
+		if(moveList.size() % 2 == 0) {
+			return max(nodes);
+		}
+		else {
+			return min(nodes);
+		}
 	}
 	
 	/*

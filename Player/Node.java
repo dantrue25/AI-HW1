@@ -13,6 +13,7 @@ public class Node {
 	public double heuristic;
 	public ArrayList<Move> moves;
 	public ArrayList<Node> children;
+	public boolean skipSiblings = false;
 	
 	public Node(ArrayList<Move> moves) {
 		this.moves = moves;
