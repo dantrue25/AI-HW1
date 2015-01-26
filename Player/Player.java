@@ -169,25 +169,21 @@ public class Player {
 			currentNode.heuristic = currentBoardCopy.getHeuristic();
 			
 			if(currentNode.getLevel() % 2 == 0) {
-				if(currentNode.getLevel() > 1) {
-					if(currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
+					if(currentNode.getLevel() > 1 && currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
 						currentNode.skipSiblings = true;
 					}
-				}
 			}
 			else {
-				if(currentNode.getLevel() > 1) {
-					if(currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
+					if(currentNode.getLevel() > 1 && currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
 						currentNode.skipSiblings = true;
 					}
-				}
 			}
 			
 			return currentNode;
 		}
 		
 		for(Move newM: newMoves) {
-			ArrayList<Move> moves = (ArrayList<Move>) moveList.clone();
+			ArrayList<Move> moves = clone(moveList);
 			Node n = new Node(moves);
 			n.moves.add(newM);
 			currentNode.addChild(n);
@@ -204,10 +200,8 @@ public class Player {
 		
 		if(moveList.size() % 2 == 0) {
 			Node max = max(nodes);
-			if(currentNode.getLevel() > 1) {
-			if(currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
+			if(currentNode.getLevel() > 1 && currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
 				currentNode.skipSiblings = true;
-			}
 			}
 			int maxAlpha = Math.max(alphaBeta.get(currentNode.getLevel()),  (int)(max.heuristic));
 			alphaBeta.set(currentNode.getLevel(), maxAlpha);
@@ -215,15 +209,21 @@ public class Player {
 		}
 		else {
 			Node min = min(nodes);
-			if(currentNode.getLevel() > 1) {
-			if(currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
+			if(currentNode.getLevel() > 1 && currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
 				currentNode.skipSiblings = true;
-			}
 			}
 			int minBeta = Math.min(alphaBeta.get(currentNode.getLevel()), (int)min.heuristic);
 			alphaBeta.set(currentNode.getLevel(), minBeta);
 			return min;
 		}
+	}
+	
+	public ArrayList<Move> clone(ArrayList<Move> moves) {
+		ArrayList<Move> copyMoves = new ArrayList<Move>();
+		for(Move m: moves) {
+			copyMoves.add(m.clone());
+		}
+		return copyMoves;
 	}
 	
 	/*

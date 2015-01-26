@@ -21,6 +21,13 @@ public class Move {
 		this.moveType = moveType;
 	}
 	
+	public Move clone() {
+		Move newMove = new Move(this.column, this.moveType);
+		newMove.row = this.row;
+		return newMove;
+	}
+	
+	
 	/**
 	 * Used to pass referee our move
 	 */
