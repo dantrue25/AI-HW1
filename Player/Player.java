@@ -13,7 +13,7 @@ import java.util.List;
 public class Player {
 
 	public static Board currentState;
-	String playerName = "B";
+	String playerName = "A";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	
 	int height;

@@ -9,6 +9,7 @@ package Player;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Board {
 	
@@ -60,8 +61,9 @@ public class Board {
 	//Determine a value for the given board
 	public double getHeuristic()
 	{
-		
-		return Math.random();
+		Random r = new Random();
+		r.setSeed(System.currentTimeMillis());
+		return r.nextDouble();
 	}
 	
 	
