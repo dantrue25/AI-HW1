@@ -80,7 +80,7 @@ public class Player {
 			Node root = new Node(new ArrayList<Move>());
 			
 			// Get next move from minimax algorithm
-			Move ourNextMove = minimax(root, 2).moves.get(0);
+			Move ourNextMove = minimax(root, 5).moves.get(0);
 			
 			currentState.makeMove(ourNextMove, ourPlayerNum);
 			System.out.println(ourNextMove.toString());
@@ -135,9 +135,8 @@ public class Player {
 	 * best minimax value.
 	 */
 	public Node minimax (Node currentNode, int terminalDepth) {
-//		/////////////////////////////
-//		JOptionPane.showMessageDialog(null, "11111111");
 		
+		// Create board of new state
 		Board currentBoardCopy = currentState.clone();
 		ArrayList<Move> moveList = currentNode.moves;
 		int player = ourPlayerNum;
@@ -150,33 +149,50 @@ public class Player {
 			else
 				player = ourPlayerNum;
 		}
-		
-//		///////////////////////////////
-//		JOptionPane.showMessageDialog(null, "222222222");
-		
+	
 		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
-		
-		// If it is a leaf node, calculate heuristic and return it
-		if(moveList.size() >= terminalDepth || newMoves.isEmpty()) {
-			currentNode.heuristic = currentBoardCopy.getHeuristic();
-			return currentNode;
-		}
-		
-//		//////////////////////////////////
-//		JOptionPane.showMessageDialog(null, "MOVES: " + newMoves.size());
-		
+
 		for(Move newM: newMoves) {
 			Node n = new Node(moveList);
 			n.moves.add(newM);
 			currentNode.addChild(n);
-			minimax(n, terminalDepth);
 		}
 		
-		if(moveList.size() % 2 == 0)
+		for(Node child: currentNode.children) {
+			minimax(child, terminalDepth);
+		}
+		
+		if(moveList.size() >= terminalDepth || newMoves.isEmpty()) {
+			currentNode.heuristic = currentBoardCopy.getHeuristic();
+			return currentNode;
+		}
+		else if(moveList.size() % 2 == 0)
 			return max(currentNode.children);
 		else
 			return min(currentNode.children);
 	}
+	
+	/*
+	 * 	public int traverse(Node node) {
+		ArrayList<Integer> vals = new ArrayList<Integer>();
+		for(Node n: node.children) {
+			vals.add(traverse(n));
+		}
+		
+		if(node.children.isEmpty()) { //leaf node
+			System.out.println(node.value);
+			return node.value;
+		}
+		else if(node.level % 2 == 0) {
+			System.out.println(max(vals));
+			return max(vals);
+		}
+		else {
+			System.out.println(min(vals));
+			return min(vals);
+		}
+	}
+	 */
 	
 	/*
 	 * Returns the node with the highest heuristic
