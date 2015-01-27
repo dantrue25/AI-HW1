@@ -18,7 +18,7 @@ import java.util.List;
 public class Player {
 
 	public static Board currentState;
-	String playerName = "B";
+	String playerName = "A";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	
 	int height;
@@ -26,12 +26,12 @@ public class Player {
 	int connectN;
 	int moveTime;
 	int firstPlayer;
-	int ourPlayerNum;
+	public static int ourPlayerNum;
 	int otherPlayerNum;
 	int turnNum = 1;
 	boolean first_move=false;
 	ArrayList<Integer> alphaBeta;
-	int terminalDepth = 3;
+	int terminalDepth = 4;
 	int MAXVALUE = 1000;
 	int MINVALUE = -1000;
 	
@@ -100,6 +100,7 @@ public class Player {
 					alphaBeta.add(MAXVALUE);
 				}
 				else
+					
 					alphaBeta.add(MINVALUE);
 					
 			}
@@ -248,28 +249,7 @@ public class Player {
 		return copyMoves;
 	}
 	
-	/*
-	 * 	public int traverse(Node node) {
-		ArrayList<Integer> vals = new ArrayList<Integer>();
-		for(Node n: node.children) {
-			vals.add(traverse(n));
-		}
-		
-		if(node.children.isEmpty()) { //leaf node
-			System.out.println(node.value);
-			return node.value;
-		}
-		else if(node.level % 2 == 0) {
-			System.out.println(max(vals));
-			return max(vals);
-		}
-		else {
-			System.out.println(min(vals));
-			return min(vals);
-		}
-	}
-	 */
-	
+
 	/*
 	 * Returns the node with the highest heuristic out of the given nodes children
 	 */

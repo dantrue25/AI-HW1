@@ -9,7 +9,7 @@ package Player;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
+//import java.util.Random;
 
 public class Board {
 	
@@ -59,11 +59,19 @@ public class Board {
 	}
 	
 	//Determine a value for the given board
-	public double getHeuristic()
-	{
-		Random r = new Random();
-		r.setSeed(System.currentTimeMillis());
-		return r.nextDouble();
+	public double getHeuristic() {
+		double hval = 0;
+//		for(int i = 0; i < this.width; i++)
+//		{
+//			hval += numOfDiscsInColumn[i] * (i + 1);
+//		}
+		for(int i = 2; i <= N; i++) {
+			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i);
+		}
+		
+		return hval;
+					
+	
 	}
 	
 	
@@ -283,6 +291,52 @@ public class Board {
 			 return this.NOCONNECTION;
 	  }
 
+	  //Used for the get heuristic function to evaluate a given board
+	  public int checkH(int numInARow){
+		  int max1=0;
+		  int max2=0;
+		  int player1Count = 0;
+		  int player2Count = 0;
+		  //check each row, horizontally
+		  for(int i=0;i<this.height;i++){
+			max1=0;
+			max2=0;
+			for(int j=0;j<this.width;j++){
+					if(board[i][j]==PLAYER1){
+						max1++;
+						max2=0;
+						if(max1 == N && Player.ourPlayerNum == 1)
+							return 100;
+						else if(max1 ==N && Player.ourPlayerNum != 1)
+							return -100;
+					}
+					else if(board[i][j]==PLAYER2){
+						max1=0;
+						max2++;
+						if(max2 == N && Player.ourPlayerNum == 2)
+							return 100;
+						else if(max2==N && Player.ourPlayerNum != 2)
+							return -100;
+					}
+					else{
+						if(max1 >= numInARow) {
+							player1Count++;
+						}
+						if(max2 >= numInARow) {
+							player2Count++;
+						}
+						max1=0;
+						max2=0;
+					}
+				}
+			 } 
+		  if(Player.ourPlayerNum == 1) {
+			  return player1Count - player2Count;
+		  }
+		  else
+			  return player2Count - player1Count;
+	  }
+	  
 	  //Check the board vertically to see if there is a winner
 	  public int checkVertically(){
 		  //check each column, vertically
@@ -321,6 +375,51 @@ public class Board {
 				 return this.PLAYER2;
 			 
 			 return this.NOCONNECTION;
+	  }
+	  
+	  
+	//The heuristic function uses this to determine if this is a good board state
+	  public int checkV(int numInARow){
+		  //check each column, vertically
+		  int max1=0;
+		  int max2=0;
+		  int player1Count = 0;
+		  int player2Count = 0;
+			 
+			 for(int j=0;j<this.width;j++){
+				 max1=0;
+				 max2=0;
+				for(int i=0;i<this.height;i++){
+					if(board[i][j]==PLAYER1){
+						max1++;
+						max2=0;
+						if(max1==N && Player.ourPlayerNum == 1)
+							return 100;
+						else if(max1==N && Player.ourPlayerNum !=1)
+							return -100;
+					}
+					else if(board[i][j]==PLAYER2){
+						max1=0;
+						max2++;
+						if(max2==N && Player.ourPlayerNum == 2)
+							return 100;
+						else if(max2==N && Player.ourPlayerNum != 2)
+							return -100;
+					}
+					else{
+						if(max1 >= numInARow)
+							player1Count++;
+						if(max2 >= numInARow)
+							player2Count++;
+						max1=0;
+						max2=0;
+					}
+				}
+			 } 
+			 if(Player.ourPlayerNum == 1)
+				 return player1Count - player2Count;
+			 else
+				 return player2Count - player1Count;
 	  }
 	  
 	  
@@ -376,6 +475,65 @@ public class Board {
 			 return this.NOCONNECTION;
 	   }
 		 
+	   //Used by the heuristic function to determine how many diags in a row we have
+	   public int checkD1(int numInARow){
+		 //check diagonally y=-x+k
+		   int max1=0;
+		   int max2=0;
+		   int player1Count=0;
+		   int player2Count=0;
+		   int upper_bound=height-1+width-1-(N-1);
+		   
+			 for(int k=N-1;k<=upper_bound;k++){			
+				 max1=0;
+				 max2=0;
+				 int x,y;
+				 if(k<width) 
+					 x=k;
+				 else
+					 x=width-1;
+				 y=-x+k;
+				 
+				while(x>=0  && y<height){
+					// System.out.println("k: "+k+", x: "+x+", y: "+y);
+					if(board[height-1-y][x]==PLAYER1){
+						max1++;
+						max2=0;
+						if(max1 == N && Player.ourPlayerNum == 1)
+							return 100;
+						else if(max1 == N && Player.ourPlayerNum != 1)
+							return -100;
+					}
+					else if(board[height-1-y][x]==PLAYER2){
+						max1=0;
+						max2++;
+						if(max2 == N && Player.ourPlayerNum == 2)
+							return 100;
+						else if(max2 == N && Player.ourPlayerNum != 2)
+							return -100;
+					}
+					else{
+						if(max1 >= numInARow) {
+							player1Count++;
+						}
+						if(max2 >= numInARow) {
+							player2Count++;
+						}
+						max1=0;
+						max2=0;
+					}
+					x--;
+					y++;
+				}	 
+				 
+			 }
+
+			 if(Player.ourPlayerNum == 1)
+				 return player1Count - player2Count;
+			 else
+				 return player2Count - player1Count;
+	   }
+	   
 	   //Check the board diagonally to see if there is a winner
 	   public int checkDiagonally2(){
 		 //check diagonally y=x-k
@@ -429,6 +587,67 @@ public class Board {
 			 return this.NOCONNECTION;
 	   }
 		 
+	 //Check the board diagonally to see if there is a winner
+	   public int checkD2(int numInARow){
+		 //check diagonally y=x-k
+		   int max1=0;
+		   int max2=0;
+		   int player1Count = 0;
+		   int player2Count = 0;
+		   int upper_bound=width-1-(N-1);
+		   int  lower_bound=-(height-1-(N-1));
+		  // System.out.println("lower: "+lower_bound+", upper_bound: "+upper_bound);
+			 for(int k=lower_bound;k<=upper_bound;k++){			
+				 max1=0;
+				 max2=0;
+				 int x,y;
+				 if(k>=0) 
+					 x=k;
+				 else
+					 x=0;
+				 y=x-k;
+				while(x>=0 && x<width && y<height){
+					// System.out.println("k: "+k+", x: "+x+", y: "+y);
+					if(board[height-1-y][x]==PLAYER1){
+						max1++;
+						max2=0;
+						if(max1 == N && Player.ourPlayerNum == 1)
+							return 100;
+						else if(max1 == N && Player.ourPlayerNum != 1)
+							return -100;
+
+					}
+					else if(board[height-1-y][x]==PLAYER2){
+						max1=0;
+						max2++;
+						if(max2 == N && Player.ourPlayerNum == 2)
+							return 100;
+						else if(max2 == N && Player.ourPlayerNum != 2)
+							return -100;
+
+					}
+					else{
+						if(max1 >= numInARow) 
+							player1Count++;
+						if(max2 >= numInARow)
+							player2Count++;
+						max1=0;
+						max2=0;
+					}
+					x++;
+					y++;
+				}	 
+				 
+			 }	 //end for y=x-k
+			 
+			 if(Player.ourPlayerNum == 1) 
+				 return player1Count - player2Count;
+			 else
+				 return player2Count - player1Count;
+			 
+			 
+	   }
+	   
 		 //Update the board with the given row, column and playerNumber
 		 public void setBoard(int row, int col, int player){
 			 if(row>=height || col>=width)
