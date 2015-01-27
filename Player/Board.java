@@ -62,11 +62,31 @@ public class Board {
 	public double getHeuristic() {
 		double hval = 0;
 		for(int i = 2; i <= N; i++) {
-			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i) + checkHReverse(i);
+			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i) + checkHReverse(i) + checkMiddle();
 		}
 		return hval;
 	}
 	
+	public double checkMiddle() {
+		int sign = -1;
+		int sum=0;
+//		double hval;
+		
+		for(int i = 0; i < this.width; i++) {
+		
+			if(i >= (int)(width/2) -1 && i <= (int)(width/2) + 1) {
+				sign = 1;
+			}
+			sum += sign * this.numOfDiscsInColumn[i];
+		}
+			
+//		if(sum > 0)
+//			hval = 1;
+//		else
+//			hval = 0;
+			
+		return sum;
+	}
 	
 	
 	//Given a player, use the current board state to create a list of possible moves
@@ -128,7 +148,7 @@ public class Board {
 		}
 	}
 	
-	//Prints the board to stdout
+	//Prints the board to file
 	 public void printBoard(){
 			try
 			{
