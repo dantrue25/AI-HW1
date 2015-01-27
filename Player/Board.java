@@ -61,17 +61,10 @@ public class Board {
 	//Determine a value for the given board
 	public double getHeuristic() {
 		double hval = 0;
-//		for(int i = 0; i < this.width; i++)
-//		{
-//			hval += numOfDiscsInColumn[i] * (i + 1);
-//		}
 		for(int i = 2; i <= N; i++) {
-			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i);
+			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i) + checkHReverse(i);
 		}
-		
 		return hval;
-					
-	
 	}
 	
 	
@@ -110,23 +103,6 @@ public class Board {
 				}
 			}
 		}
-		
-		try
-		{
-				    String filename= "DebugA.txt";
-				    FileWriter fw = new FileWriter(filename,true); //the true will append the new data
-				    fw.write("MoveList: for player: " + player + "\n");//appends the string to the file
-				    for(int i = 0; i < possibleMoves.size(); i++)
-				    {
-				    	fw.write(possibleMoves.get(i).toString() + "\n" );
-				    }
-				    fw.close();
-				}
-				catch(IOException ioe)
-				{
-				    System.err.println("IOException: " + ioe.getMessage());
-				}
-		
 		return possibleMoves;
 	}
 	
@@ -337,6 +313,54 @@ public class Board {
 			  return player2Count - player1Count;
 	  }
 	  
+	  //Used for the get heuristic function to evaluate a given board
+	  //Checks num in a row from right to left
+	  public int checkHReverse(int numInARow){
+		  int max1=0;
+		  int max2=0;
+		  int player1Count = 0;
+		  int player2Count = 0;
+		  //check each row, horizontally
+		  for(int i=0;i<this.height;i++){
+			max1=0;
+			max2=0;
+			for(int j=this.width-1; j >= 0;j--){
+					if(board[i][j]==PLAYER1){
+						max1++;
+						max2=0;
+						if(max1 == N && Player.ourPlayerNum == 1)
+							return 100;
+						else if(max1 ==N && Player.ourPlayerNum != 1)
+							return -100;
+					}
+					else if(board[i][j]==PLAYER2){
+						max1=0;
+						max2++;
+						if(max2 == N && Player.ourPlayerNum == 2)
+							return 100;
+						else if(max2==N && Player.ourPlayerNum != 2)
+							return -100;
+					}
+					else{
+						if(max1 >= numInARow) {
+							player1Count++;
+						}
+						if(max2 >= numInARow) {
+							player2Count++;
+						}
+						max1=0;
+						max2=0;
+					}
+				}
+			 } 
+		  if(Player.ourPlayerNum == 1) {
+			  return player1Count - player2Count;
+		  }
+		  else
+			  return player2Count - player1Count;
+	  }
+
+	  
 	  //Check the board vertically to see if there is a winner
 	  public int checkVertically(){
 		  //check each column, vertically
@@ -421,6 +445,7 @@ public class Board {
 			 else
 				 return player2Count - player1Count;
 	  }
+
 	  
 	  
 	  //Check the board diagonally to see if there is a winner
@@ -482,9 +507,9 @@ public class Board {
 		   int max2=0;
 		   int player1Count=0;
 		   int player2Count=0;
-		   int upper_bound=height-1+width-1-(N-1);
+		   int upper_bound=height-1+width-1-(numInARow-1);
 		   
-			 for(int k=N-1;k<=upper_bound;k++){			
+			 for(int k=numInARow-1;k<=upper_bound;k++){			
 				 max1=0;
 				 max2=0;
 				 int x,y;
@@ -524,15 +549,15 @@ public class Board {
 					}
 					x--;
 					y++;
-				}	 
-				 
+				}	  
 			 }
-
+			 
 			 if(Player.ourPlayerNum == 1)
 				 return player1Count - player2Count;
 			 else
 				 return player2Count - player1Count;
 	   }
+	   
 	   
 	   //Check the board diagonally to see if there is a winner
 	   public int checkDiagonally2(){
@@ -594,8 +619,8 @@ public class Board {
 		   int max2=0;
 		   int player1Count = 0;
 		   int player2Count = 0;
-		   int upper_bound=width-1-(N-1);
-		   int  lower_bound=-(height-1-(N-1));
+		   int upper_bound=width-1-(numInARow-1);
+		   int  lower_bound=-(height-1-(numInARow-1));
 		  // System.out.println("lower: "+lower_bound+", upper_bound: "+upper_bound);
 			 for(int k=lower_bound;k<=upper_bound;k++){			
 				 max1=0;

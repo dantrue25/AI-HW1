@@ -31,7 +31,7 @@ public class Player {
 	int turnNum = 1;
 	boolean first_move=false;
 	ArrayList<Integer> alphaBeta;
-	int terminalDepth = 4;
+	int terminalDepth = 7;
 	int MAXVALUE = 1000;
 	int MINVALUE = -1000;
 	
@@ -59,6 +59,26 @@ public class Player {
 			
 			// Create initial board
 			currentState = new Board(height, width, connectN);
+			
+			if(moveTime >= 30)
+				terminalDepth = 7;
+			else if(moveTime >= 15)
+				terminalDepth = 6;
+			else if(moveTime >= 4)
+				terminalDepth = 5;
+			else if(moveTime <= 1)
+				terminalDepth = 2;
+			else
+				terminalDepth = 4;
+			
+			if(currentState.width >= 8)
+				terminalDepth--;
+			if(currentState.width >= 25)
+				terminalDepth=4;
+			if(currentState.width >= 50)
+				terminalDepth=3;
+			if(terminalDepth <=0)
+				terminalDepth = 1;
 			
 			// If we are going first, make a move, else, do nothing TEST
 			if(ourPlayerNum == firstPlayer)
