@@ -62,7 +62,7 @@ public class Board {
 	public double getHeuristic() {
 		double hval = 0;
 		for(int i = 2; i <= N; i++) {
-			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i) + checkHReverse(i);
+			hval += checkV(i) + checkH(i) + checkD1(i) + checkD2(i) + checkHReverse(i) + checkMiddle();
 		}
 		return hval;
 	}
