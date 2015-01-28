@@ -20,6 +20,12 @@ public class Node {
 	public ArrayList<Node> children;
 	public boolean skipSiblings = false;
 	
+	/*
+	 * Constructor.
+	 * Takes in a list of moves which represents the moves needed to get
+	 * from the current state of the board to this node's state.
+	 * Also creates an empty list for its children.
+	 */
 	public Node(ArrayList<Move> moves) {
 		this.moves = moves;
 		this.children = new ArrayList<Node>();

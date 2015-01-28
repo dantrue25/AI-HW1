@@ -11,14 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//import javax.swing.JOptionPane;
-
-
 
 public class Player {
-
 	public static Board currentState;
-	String playerName = "A";
+	String playerName = "DanNick";
 	BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 	
 	int height;
@@ -76,7 +72,7 @@ public class Player {
 			if(currentState.width >= 25)
 				terminalDepth=4;
 			if(currentState.width >= 50)
-				terminalDepth=3;
+				terminalDepth=2;
 			if(terminalDepth <=0)
 				terminalDepth = 1;
 			
@@ -179,19 +175,27 @@ public class Player {
 	
 	/*
 	 * Our minimax implementation.
-	 * Takes in a node and a terminal depth, and returns a node with the highest
+	 * Takes in a node of the minimax tree and returns with node with the
 	 * best minimax value.
 	 * Our alphaBeta Pruning implementation
-	 * Sets a skipSibling flag in a node if its value is less than or greater than, depending on which level
-	 * we are at, than the max or min of the parents nodes.
+	 * Sets a skipSibling flag in a node if its heuristic value is less 
+	 * than the alpha, or greater than the beta, depending on which level
+	 * we are at. 
+	 * Then calculate the max or min of the child nodes to get its minimax value.
 	 */
 	public Node minimax (Node currentNode) {
 		
-		// Create board of new state
+		// Copy the current board state
 		Board currentBoardCopy = currentState.clone();
 		ArrayList<Move> moveList = currentNode.moves;
 		int player = ourPlayerNum;
 		
+		/* Make the move for each move in the node's move list.
+		 *  Say we are going 3 levels deep, we will have to make 3 moves
+		 *  to get the current board 3 moves ahead (into future moves).
+		 *  Each node has a list of moves which will get the current 
+		 *  board to the node's prospective state
+		 */
 		for(Move m: moveList) {
 			currentBoardCopy.makeMove(m, player);
 			
@@ -200,9 +204,16 @@ public class Player {
 			else
 				player = ourPlayerNum;
 		}
-	
+		
+		// Get all possible moves for the current player at the given state
 		ArrayList<Move> newMoves = currentBoardCopy.getMoves(player);
 
+		/*
+		 *  End recursive call if it is at the desired depth or it is a terminal state.
+		 *  Calculates the current node's heuristic, and then returns itself.
+		 *  Also, if it is a MAX level, check if its heuristic is less than or equal to alpha.
+		 *  If it is a MIN level, check if its heuristic is greater than beta.
+		 */
 		if(moveList.size() >= terminalDepth || newMoves.isEmpty()) {
 			currentNode.heuristic = currentBoardCopy.getHeuristic();
 			
@@ -220,6 +231,10 @@ public class Player {
 			return currentNode;
 		}
 		
+		/*
+		 * For each possible move that the current node has, create a new child node
+		 * and add it to the current node's list of children.
+		 */
 		for(Move newM: newMoves) {
 			ArrayList<Move> moves = clone(moveList);
 			Node n = new Node(moves);
@@ -227,6 +242,12 @@ public class Player {
 			currentNode.addChild(n);
 		}
 		
+		/*
+		 * Recursive step.
+		 * Run minimax on each of current node's children.
+		 * Add the returned nodes to a list.
+		 * Checks after every minimax run to see if further nodes can be pruned.
+		 */
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		for(Node child: currentNode.children) {
 			nodes.add(minimax(child));
@@ -234,8 +255,7 @@ public class Player {
 				break;
 		}
 		
-		
-		
+		// If MAX level, return the node child node with max heuristic
 		if(moveList.size() % 2 == 0) {
 			Node max = max(nodes);
 			if(currentNode.getLevel() > 1 && currentNode.heuristic <= alphaBeta.get(currentNode.getLevel() -1)) {
@@ -245,6 +265,7 @@ public class Player {
 			alphaBeta.set(currentNode.getLevel(), maxAlpha);
 			return max;
 		}
+		// else, MIN level, return the node child node with min heuristic
 		else {
 			Node min = min(nodes);
 			if(currentNode.getLevel() > 1 && currentNode.heuristic > alphaBeta.get(currentNode.getLevel() - 1)) {
@@ -256,11 +277,7 @@ public class Player {
 		}
 	}
 	
-	/**
-	 * 
-	 * Takes an ArrayList of Moves and clones it
-	 * 
-	 */
+	// Clone an ArrayList of Moves
 	public ArrayList<Move> clone(ArrayList<Move> moves) {
 		ArrayList<Move> copyMoves = new ArrayList<Move>();
 		for(Move m: moves) {
